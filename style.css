@@ -1,0 +1,32 @@
+* {
+    font-family: Roboto,sans-serif;
+}
+
+body a {
+    text-decoration: none;
+    color: initial;
+    transition: all 100ms ease-out;
+}
+
+body a:hover {
+    color: initial;
+    opacity: 0.8;
+    transition: all 150ms ease-out;
+}
+
+.up-title {
+    font-size: 1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #608dff;
+    margin-bottom: 10px;
+}
+
+.entry-title {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.entry-content p {
+    margin-bottom: 0;
+}
