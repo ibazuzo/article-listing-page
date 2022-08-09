@@ -1,3 +1,7 @@
+:root {
+    --primaryColor: #608dff;
+}
+
 * {
     font-family: Roboto,sans-serif;
 }
@@ -14,12 +18,36 @@ body a:hover {
     transition: all 150ms ease-out;
 }
 
-.up-title {
+.entry-tags {
+    margin-bottom: 10px;
+}
+
+.tags-item {
     font-size: 1em;
     font-weight: 700;
     text-transform: uppercase;
-    color: #608dff;
-    margin-bottom: 10px;
+    color: var(--primaryColor);
+    margin-right: 20px;
+    position: relative;
+}
+
+.tags-item:not(:last-child):after {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 4px;
+    background-color: var(--primaryColor);
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -12px;
+    margin: auto;
+}
+
+.tags-item:not(:last-child):after {
+    content: "";
+    /* padding: 0 6px; */
 }
 
 .entry-title {
