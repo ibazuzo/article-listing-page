@@ -1,35 +1,62 @@
-console.log('bing2');
 let url = 'https://blogapp.bitdefender.com/hotforsecurity/ghost/api/v3/content/posts/?key=64578fbe66af3aee68c8947a0f&limit=10&include=tags&page=10';
-// let jsonData;
 
 const response = fetch(url)
     .then((response) => { return response.json(); })
     .then((data) => {
 
-        console.log(data);
-        // jsonData = data;
-
         let postsDataArr = data.posts;
-        console.log(postsDataArr);
 
-        fillFilterDropdown(postsDataArr);
-        fillArticlesList(postsDataArr);
+        createUniqueTagsList(postsDataArr);
+        generatePostsList(postsDataArr);
 
-        selectFilterOptionEvent(postsDataArr);
+        filterDropdownEvent(postsDataArr);
+        searchEvent(postsDataArr);
 
     })
-    // .then(() => {
-
-    //     console.log('jsonData:');
-    //     console.log(jsonData);
-
-
-    // })
     .catch((err) => { console.log('Request failed!', err) });
 
+// #### Execute the search function as inputs are made in the search field. Displays the posts that have the search term.
+function searchEvent(postsDataArr) {
+
+    document.getElementById('searchBar').addEventListener('input', event => {
+
+        let filteredPosts = searchPosts(event.target.value, postsDataArr);
+
+        clearPostsList();
+        generatePostsList(filteredPosts);
+
+    });
+
+}
+
+// #### Search for the term in the post title, excerpt and in the html content of the post
+function searchPosts(searchString, postsDataArr) {
+
+    let searchLower = searchString.toLowerCase();
+
+    let filteredPosts = postsDataArr.filter(post => {
+        if (post.title.toLowerCase().includes(searchLower)) {
+            return true;
+        }
+
+        if (post.excerpt.toLowerCase().includes(searchLower)) {
+            return true;
+        }
+
+        // Search in the html property is not a good solution, as it contains html tags and links that can contain the search term. I included here to make the search work in the article content too, not only in the title and excerpt
+        if (post.html.toLowerCase().includes(searchLower)) {
+            return true;
+        }
+
+        return false;
+    });
+
+    return filteredPosts;
 
 
+}
 
+// #### Generate the list of tags for a post
 function generatePostTagsListHtml(tagsData) {
 
     let htmlEl = '';
@@ -48,7 +75,8 @@ function generatePostTagsListHtml(tagsData) {
 
 }
 
-function fillFilterDropdown(postsDataArr) {
+// #### Create the list with the unique tags from all posts
+function createUniqueTagsList(postsDataArr) {
 
     let tagsArr = [];
     addDropdownOption('All');
@@ -62,7 +90,6 @@ function fillFilterDropdown(postsDataArr) {
             if (tagsData[i].visibility == 'public' && !tagsArr.includes(tagsData[i].name)) {
 
                 tagsArr.push(tagsData[i].name);
-                addDropdownOption(tagsData[i].name);
 
             }
 
@@ -70,10 +97,17 @@ function fillFilterDropdown(postsDataArr) {
 
     }
 
-    return tagsArr;
+    tagsArr.sort();
+
+    for (let i in tagsArr) {
+
+        addDropdownOption(tagsArr[i]);
+
+    }
 
 }
 
+// #### Add each tag to the dropdown/select element in page
 function addDropdownOption(tagName) {
 
     let option = document.createElement('option');
@@ -84,7 +118,8 @@ function addDropdownOption(tagName) {
 
 }
 
-function fillArticlesList(postsDataArr) {
+// #### Display the list of valid posts in the page
+function generatePostsList(postsDataArr) {
 
     for (let i in postsDataArr) {
 
@@ -115,7 +150,8 @@ function fillArticlesList(postsDataArr) {
 
 }
 
-function selectFilterOptionEvent(postsDataArr) {
+// #### Show only the posts that have the selected tag from the dropdown list
+function filterDropdownEvent(postsDataArr) {
 
     document.getElementById('filter-dropdown').addEventListener('change', event => {
 
@@ -137,13 +173,14 @@ function selectFilterOptionEvent(postsDataArr) {
         })
 
         clearPostsList();
-        fillArticlesList(displayedPosts);
+        generatePostsList(displayedPosts);
 
 
     });
 
 }
 
+// #### Remove the posts from the page
 function clearPostsList() {
 
     const parent = document.getElementById('articles-container');
