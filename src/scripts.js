@@ -128,10 +128,10 @@ function generatePostsList(postsDataArr) {
         let postRow = `
             <!-- Post -->
             <div class="row align-items-center flex-wrap mb-5">
-                <div class="col-md-3 col-12 entry-img">
+                <div class="col-lg-4 col-md-5 col-12 entry-img">
                     <a href="${postData.url}"><img src="${postData.feature_image}" alt="${postData.title}" class="img-fluid" /> </a>
                 </div>
-                <div class="col-md-9 col-12 ps-md-4 pt-lg-0 pt-3 entry-content">
+                <div class="col-lg-8 col-md-7 col-12 ps-md-4 pt-md-0 pt-3 entry-content">
                     <div class="entry-tags">${generatePostTagsListHtml(postData.tags)}</div>
                     <h3 class="entry-title">
                         <a href="${postData.url}">${postData.title}</a>
